@@ -11,18 +11,26 @@ export class MissionService {
   { id: 6, codename: 'GHOST_RIDER', status: 'COMPLETED' }
 ];
 getSummary(){
-     const summary = {};
+     let active: number = 0
+     let completed: number = 0
+     let failed: number = 0
 
     for (const mission of this.missions) {
       const status = mission.status;
-
-      if (summary[status]) {
-        summary[status]++;
-      } else {
-        summary[status] = 1;
-      }
+        if(status === 'ACTIVE'){
+            return active++;
+        }
+        else if(status === 'COMPLETED'){
+            return completed++;
+        }
+        else{
+            return failed++;
+        }
     }
-
-    return summary;
+    return {
+        ACTIVE: active,
+        COMPLETED: completed,
+        FAILED: failed
+    }
   }
 }
