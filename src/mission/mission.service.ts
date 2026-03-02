@@ -18,13 +18,13 @@ getSummary(){
     for (const mission of this.missions) {
       const status = mission.status;
         if(status === 'ACTIVE'){
-            return active++;
+            active++;
         }
         else if(status === 'COMPLETED'){
-            return completed++;
+            completed++;
         }
         else{
-            return failed++;
+            failed++;
         }
     }
     return {
