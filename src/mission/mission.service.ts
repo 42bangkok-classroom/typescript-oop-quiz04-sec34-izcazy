@@ -51,7 +51,7 @@ export class MissionService {
       }
 
       // คำนวณระยะเวลา
-      const start = new Date(mission.startDate as string);
+      const start = new Date(mission.startDate as number);
       const end = new Date(mission.endDate);
 
       // สูตร: (ปลายทาง - ต้นทาง) / เวลา 1 วันในหน่วย ms
@@ -108,7 +108,7 @@ export class MissionService {
     const newMission: IMission = {
       id: newId,
       status: 'ACTIVE',
-      endDate: undefined,
+      endDate: null,
       codename: body.codename,
       riskLevel: body.riskLevel,
       targetName: body.targetName,
