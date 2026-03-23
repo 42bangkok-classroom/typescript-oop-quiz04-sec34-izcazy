@@ -24,7 +24,7 @@ export class MissionController {
     return this.missionService.findOne(id, clearance || 'STANDARD');
   }
   @Post()
-  createMission(@Body() body: any): IMission {
+  createMission(@Body() body: IMission): IMission {
     return this.missionService.create(body);
   }
 }
