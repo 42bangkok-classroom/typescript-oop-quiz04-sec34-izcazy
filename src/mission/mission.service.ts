@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { IMission } from './mission.interface';
 import process from 'process';
 import path from 'path';
@@ -36,6 +36,7 @@ export class MissionService {
       FAILED: failed,
     };
   }
+  private readonly filePath = path.join(process.cwd(), 'data', 'missions.json');
   //p02
   findAll(): IMission[] {
     const filePath = path.join(process.cwd(), 'data', 'missions.json');
@@ -62,5 +63,32 @@ export class MissionService {
         durationDays: diffDays,
       };
     });
+  }
+  //p03
+  findOne(id: string, clearance: string = 'STANDARD'): IMission {
+    const fileData = fs.readFileSync(this.filePath, 'utf-8');
+    const missions: IMission[] = JSON.parse(fileData) as IMission[];
+
+    const mission = missions.find((m) => m.id === id);
+
+    if (!mission) {
+      throw new NotFoundException('Mission not found');
+    }
+
+    // เงื่อนไขเซ็นเซอร์:
+    // ถ้า riskLevel เป็น HIGH หรือ CRITICAL
+    // และ clearance ไม่ใช่ TOP_SECRET
+    const isSensitive =
+      mission.riskLevel === 'HIGH' || mission.riskLevel === 'CRITICAL';
+    const isAuthorized = clearance === 'TOP_SECRET';
+
+    if (isSensitive && !isAuthorized) {
+      return {
+        ...mission,
+        targetName: '***REDACTED***',
+      };
+    }
+
+    return mission;
   }
 }
