@@ -91,7 +91,8 @@ export class MissionService {
 
     return mission;
   }
-  create(body: any): IMission {
+  //p04
+  create(body: IMission): IMission {
     // 1. อ่านข้อมูลเดิมจากไฟล์ (ใช้ as IMission[] เพื่อเลี่ยง Error Unsafe assignment)
     const fileData = fs.readFileSync(this.filePath, 'utf-8');
     const missions: IMission[] = JSON.parse(fileData) as IMission[];
@@ -106,9 +107,12 @@ export class MissionService {
     // 3. สร้าง Object ภารกิจใหม่พร้อมค่า Default ตามโจทย์
     const newMission: IMission = {
       id: newId,
-      status: 'ACTIVE', // ค่า Default
-      endDate: null, // ค่า Default
-      ...body, // ข้อมูลที่รับมาจาก Body (codename, riskLevel, targetName, startDate)
+      status: 'ACTIVE',
+      endDate: undefined,
+      codename: body.codename,
+      riskLevel: body.riskLevel,
+      targetName: body.targetName,
+      startDate: body.startDate,
     };
 
     // 4. บันทึกลง Array และเขียนทับไฟล์เดิม
