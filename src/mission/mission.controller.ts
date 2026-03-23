@@ -10,6 +10,7 @@ export class MissionController {
   getSummary() {
     return this.missionService.getSummary();
   }
+  //p02
   @Get()
   getMissions(): IMission[] {
     return this.missionService.findAll();

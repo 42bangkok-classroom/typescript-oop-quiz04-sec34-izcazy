@@ -52,7 +52,7 @@ export class MissionService {
       // คำนวณระยะเวลา
       const start = new Date(mission.startDate as string);
       const end = new Date(mission.endDate);
-      
+
       // สูตร: (ปลายทาง - ต้นทาง) / เวลา 1 วันในหน่วย ms
       const diffTime = end.getTime() - start.getTime();
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
