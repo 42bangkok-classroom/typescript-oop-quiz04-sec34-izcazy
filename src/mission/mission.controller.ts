@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { MissionService } from './mission.service';
 import type { IMission } from './mission.interface';
 
@@ -22,5 +22,9 @@ export class MissionController {
     @Query('clearance') clearance?: string,
   ): IMission {
     return this.missionService.findOne(id, clearance || 'STANDARD');
+  }
+  @Post()
+  createMission(@Body() body: any): IMission {
+    return this.missionService.create(body);
   }
 }

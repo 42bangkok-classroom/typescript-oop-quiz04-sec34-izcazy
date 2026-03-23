@@ -91,4 +91,30 @@ export class MissionService {
 
     return mission;
   }
+  create(body: any): IMission {
+    // 1. อ่านข้อมูลเดิมจากไฟล์ (ใช้ as IMission[] เพื่อเลี่ยง Error Unsafe assignment)
+    const fileData = fs.readFileSync(this.filePath, 'utf-8');
+    const missions: IMission[] = JSON.parse(fileData) as IMission[];
+
+    // 2. คำนวณ ID ถัดไป (หาค่า Max ของ ID เดิมแล้ว +1)
+    const lastId =
+      missions.length > 0
+        ? Math.max(...missions.map((m) => parseInt(m.id)))
+        : 0;
+    const newId = (lastId + 1).toString();
+
+    // 3. สร้าง Object ภารกิจใหม่พร้อมค่า Default ตามโจทย์
+    const newMission: IMission = {
+      id: newId,
+      status: 'ACTIVE', // ค่า Default
+      endDate: null, // ค่า Default
+      ...body, // ข้อมูลที่รับมาจาก Body (codename, riskLevel, targetName, startDate)
+    };
+
+    // 4. บันทึกลง Array และเขียนทับไฟล์เดิม
+    missions.push(newMission);
+    fs.writeFileSync(this.filePath, JSON.stringify(missions, null, 2), 'utf-8');
+
+    return newMission;
+  }
 }
