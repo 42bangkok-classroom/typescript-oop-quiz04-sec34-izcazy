@@ -41,11 +41,9 @@ export class MissionService {
   findAll(): IMission[] {
     const filePath = path.join(process.cwd(), 'data', 'missions.json');
     const fileData = fs.readFileSync(filePath, 'utf-8');
-    // ใช้ as IMission[] เพื่อเลี่ยง Unsafe assignment error
     const missions: IMission[] = JSON.parse(fileData) as IMission[];
 
     return missions.map((mission) => {
-      // เงื่อนไข: ถ้า endDate เป็น null ให้ส่ง -1
       if (!mission.endDate) {
         return { ...mission, durationDays: -1 };
       }
@@ -54,7 +52,7 @@ export class MissionService {
       const start = new Date(mission.startDate as number);
       const end = new Date(mission.endDate);
 
-      // สูตร: (ปลายทาง - ต้นทาง) / เวลา 1 วันในหน่วย ms
+      // (ปลายทาง - ต้นทาง) / เวลา 1 วัน
       const diffTime = end.getTime() - start.getTime();
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
@@ -117,5 +115,24 @@ export class MissionService {
     fs.writeFileSync(this.filePath, JSON.stringify(missions, null, 2), 'utf-8');
 
     return newMission;
+  }
+  //p05
+  remove(id: string): { message: string } {
+    // อ่านไฟล์ทั้งหมด
+    const filecontent = fs.readFileSync(this.filePath, 'utf-8');
+    const missions = JSON.parse(filecontent) as IMission[];
+    // หาว่ามีไอดีนี้จริงมั้ย
+    const missionIndex = missions.findIndex((m) => m.id === id);
+    // ถ้าไม่เจอ
+    if (missionIndex === -1) {
+      throw new NotFoundException('Mission id not found');
+    }
+    // ถ้าเจอ id ให้ลบภารกิจออกทั้งหมด
+    const updateMissions = missions.filter((m) => m.id != id);
+    // เขียนข้อมูลใหม่
+    fs.writeFileSync(this.filePath, JSON.stringify(updateMissions, null, 2));
+    return {
+      message: `Mission ID ${id} has been successfully deleted.`,
+    };
   }
 }
