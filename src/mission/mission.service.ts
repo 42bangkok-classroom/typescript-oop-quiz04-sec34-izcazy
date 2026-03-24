@@ -75,9 +75,6 @@ export class MissionService {
       throw new NotFoundException('Mission not found');
     }
 
-    // เงื่อนไขเซ็นเซอร์:
-    // ถ้า riskLevel เป็น HIGH หรือ CRITICAL
-    // และ clearance ไม่ใช่ TOP_SECRET
     const isSensitive =
       mission.riskLevel === 'HIGH' || mission.riskLevel === 'CRITICAL';
     const isAuthorized = clearance === 'TOP_SECRET';
@@ -93,18 +90,18 @@ export class MissionService {
   }
   //p04
   create(body: IMission): IMission {
-    // 1. อ่านข้อมูลเดิมจากไฟล์ (ใช้ as IMission[] เพื่อเลี่ยง Error Unsafe assignment)
+    // 1. อ่านข้อมูลเดิมจากไฟล์ 
     const fileData = fs.readFileSync(this.filePath, 'utf-8');
     const missions: IMission[] = JSON.parse(fileData) as IMission[];
 
-    // 2. คำนวณ ID ถัดไป (หาค่า Max ของ ID เดิมแล้ว +1)
+    // 2. คำนวณ ID 
     const lastId =
       missions.length > 0
         ? Math.max(...missions.map((m) => parseInt(m.id)))
         : 0;
     const newId = (lastId + 1).toString();
 
-    // 3. สร้าง Object ภารกิจใหม่พร้อมค่า Default ตามโจทย์
+    // 3. สร้าง Object ภารกิจใหม่
     const newMission: IMission = {
       id: newId,
       status: 'ACTIVE',
