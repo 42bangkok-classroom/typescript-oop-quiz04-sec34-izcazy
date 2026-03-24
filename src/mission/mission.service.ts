@@ -90,11 +90,11 @@ export class MissionService {
   }
   //p04
   create(body: IMission): IMission {
-    // 1. อ่านข้อมูลเดิมจากไฟล์ 
+    // 1. อ่านข้อมูลเดิมจากไฟล์
     const fileData = fs.readFileSync(this.filePath, 'utf-8');
     const missions: IMission[] = JSON.parse(fileData) as IMission[];
 
-    // 2. คำนวณ ID 
+    // 2. คำนวณ ID
     const lastId =
       missions.length > 0
         ? Math.max(...missions.map((m) => parseInt(m.id)))
