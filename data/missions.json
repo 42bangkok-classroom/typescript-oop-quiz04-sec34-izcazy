@@ -1,5 +1,11 @@
 [
   {
+    "id": "1",
+    "targetName": "Dr. Viktor",
+    "status": "Active",
+    "clearance": "STANDARD"
+  },
+  {
     "id": "2",
     "codename": "NIGHT_SHADOW",
     "status": "ACTIVE",
